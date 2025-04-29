@@ -1,26 +1,59 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 //include images into your bundle
 import rigoImage from "../../img/rigo-baby.jpg";
 
 //create your first component
 const Home = () => {
-	return (
-		<div className="text-center">
-            
+	const [songs,setSongs] = useState([])
 
-			<h1 className="text-center mt-5">Hello Rigo!</h1>
-			<p>
-				<img src={rigoImage} />
-			</p>
-			<a href="#" className="btn btn-success">
-				If you see this green button... bootstrap is working...
-			</a>
-			<p>
-				Made by{" "}
-				<a href="http://www.4geeksacademy.com">4Geeks Academy</a>, with
-				love!
-			</p>
+	/*
+	Solo los componentes, la primer letra va en mayuscula, ejemplo: Home
+	Las funciones, la primer letra va en minuscula, la segunda palabra la primera letra va en mayuscula
+	
+	Ejemplo: obtenerCanciones
+	*/
+	const obtenerCanciones = async () => {
+		try {
+			const response = await fetch("https://playground.4geeks.com/sound/songs");
+			console.log(response);
+			const data = await response.json()
+			console.log(data.songs)
+			setSongs (data.songs)
+		} catch (error) {
+			console.log(error);
+
+		}
+
+	}
+
+	useEffect(() => {
+   obtenerCanciones()
+
+
+
+
+
+	}, []) // Se ejecuta una solo vez
+	return (
+		<div className="text-center container">
+
+
+			<h1 className="text-center mt-5">My Spotify!</h1>
+			<div className="d-flex justify-content-center">
+
+				<div className="list-group w-75">
+
+					{songs.map((cancion)=> (
+						<a href="#" className="list-group-item list-group-item-action list-group-item-dark " aria-current="true">
+						{cancion.name}
+					</a>
+					))}
+					
+					
+				</div>
+			</div>
+
 		</div>
 	);
 };
